@@ -1,0 +1,76 @@
+<!-- Assignment 1 COMP303-002
+     Maria Angelina Guerta Ligo 301428777
+     Ayushi Parmar 301444746
+     10-30-2025-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Edit Reservation</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <style>
+        input[readonly] {
+            background-color: #e9e9e9;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="container page centered">
+  <h2>Edit Reservation</h2>
+
+
+  <div th:if="${error}" class="error" th:text="${error}"></div>
+  <div th:if="${message}" class="success" th:text="${message}"></div>
+
+  <form th:action="@{/reservation/update}" method="post" class="card">
+   
+    <input type="hidden" name="id" th:value="${reservation.reservationId}" />
+
+    <label>Origin</label>
+    <input type="text" th:value="${reservation.flightId.origin}" readonly />
+
+    <label>Destination</label>
+    <input type="text" th:value="${reservation.flightId.destination}" readonly />
+
+    <label>Airline</label>
+    <input type="text" th:value="${reservation.flightId.airlineName}" readonly />
+
+    <label>Departure Time</label>
+    <select name="departureTime" required>
+      <option th:each="dt : ${departureTimes}"
+              th:value="${#temporals.format(dt, 'yyyy-MM-dd''T''HH:mm')}"
+              th:text="${#temporals.format(dt, 'yyyy-MM-dd HH:mm')}"
+              th:selected="${dt == reservation.flightId.departureTime}">
+      </option>
+    </select>
+
+    <div class="row two">
+      <div>
+        <label>Number of Adults</label>
+        <input type="number" name="noOfAdults" th:value="${reservation.noOfAdults}" min="1" required />
+      </div>
+      <div>
+        <label>Number of Children</label>
+        <input type="number" name="noOfChildren" th:value="${reservation.noOfChildren}" min="0" />
+      </div>
+    </div>
+
+    <p class="mt-12">
+      <strong>Current Total:</strong>
+      $<span th:text="${reservation.totalPrice}"></span>
+      <span class="muted">(recalculated after save)</span>
+    </p>
+
+    <div class="actions mt-16">
+      <button type="submit" class="btn">Save Changes</button>
+      <span th:if="${reservation.status == 'Pending Payment'}">
+    <a th:href="@{/payment/start(reservationId=${reservation.reservationId})}">
+      <button type="button" class="btn btn-primary" style="margin-left:8px;">Pay Now</button>
+    </a>
+  </span>
+    </div>
+  </form>
+</div>
+</body>
+</html>

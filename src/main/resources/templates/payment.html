@@ -1,0 +1,85 @@
+<!-- Assignment 1 COMP303-002
+     Maria Angelina Guerta Ligo 301428777
+     Ayushi Parmar 301444746
+     10-30-2025-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Payment</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container page centered">
+  <h2>Complete Your Payment</h2>
+
+  <div class="card" style="margin-bottom:12px;">
+    <p><strong>Reservation #</strong> <span th:text="${reservation.reservationId}"></span></p>
+    <p>
+      <strong>Route:</strong>
+      <span th:text="${reservation.flightId.origin}"></span> →
+      <span th:text="${reservation.flightId.destination}"></span>
+      (<span th:text="${reservation.flightId.airlineName}"></span>)
+    </p>
+    <p><strong>Total:</strong> $<span th:text="${reservation.totalPrice}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${reservation.status}"></span></p>
+  </div>
+
+  <form th:action="@{/payment/confirm}" method="post" class="card">
+    <input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
+
+    <label>Payment Method</label>
+    <div class="row">
+      <label>
+        <input type="radio" name="method" value="Credit/Debit Card" checked /> Credit / Debit Card
+      </label>
+      <label>
+        <input type="radio" name="method" value="Apple Pay" /> Apple Pay
+      </label>
+      <label>
+        <input type="radio" name="method" value="Google Pay" /> Google Pay
+      </label>
+    </div>
+
+    <div id="cardFields" class="mt-12">
+      <label>Card Number</label>
+      <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" />
+
+      <div class="row two">
+        <div>
+          <label>Expiry (MM/YY)</label>
+          <input type="text" placeholder="MM/YY" maxlength="5" />
+        </div>
+        <div>
+          <label>CVV</label>
+          <input type="password" placeholder="•••" maxlength="4" />
+        </div>
+      </div>
+    </div>
+
+    <div class="actions mt-16">
+      <button type="submit" class="btn">Pay Now</button>
+      <a th:href="@{/payment/cancel(reservationId=${reservation.reservationId})}" 
+         class="btn btn-secondary" style="margin-left:8px;">Pay Later</a>
+    </div>
+  </form>
+
+  <p class="back">
+    <a th:href="@{'/reservation/view?username=' + ${reservation.passengerId.username}}">← Back to Reservations</a>
+  </p>
+</div>
+
+<script>
+  const radios = document.querySelectorAll('input[name="method"]');
+  const cardFields = document.getElementById('cardFields');
+
+  const toggle = () => {
+    const v = [...radios].find(r => r.checked)?.value;
+    cardFields.style.display = (v === 'Credit/Debit Card') ? 'block' : 'none';
+  };
+
+  radios.forEach(r => r.addEventListener('change', toggle));
+  toggle();
+</script>
+</body>
+</html>

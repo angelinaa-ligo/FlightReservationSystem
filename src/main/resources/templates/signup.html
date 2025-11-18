@@ -1,0 +1,60 @@
+<!-- Assignment 1 COMP303-002
+     Maria Angelina Guerta Ligo 301428777
+     Ayushi Parmar 301444746
+     10-30-2025-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    
+</head>
+<body>
+<div class="container page centered">
+<h2>Customer Sign Up</h2>
+
+<!-- ✅ Success message (optional) -->
+<div th:if="${message}" class="success" th:text="${message}"></div>
+
+<form th:action="@{/signup}" th:object="${passenger}" method="post">
+
+    <label>Username:</label>
+    <input type="text" th:field="*{username}" />
+    <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+
+    <label>Password:</label>
+    <input type="password" th:field="*{password}" />
+    <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+    <label>First Name:</label>
+    <input type="text" th:field="*{firstname}" />
+    <div class="error" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></div>
+
+    <label>Last Name:</label>
+    <input type="text" th:field="*{lastname}" />
+    <div class="error" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
+
+    <label>Address:</label>
+    <input type="text" th:field="*{address}" />
+    <div class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+
+    <label>City:</label>
+    <input type="text" th:field="*{city}" />
+    <div class="error" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+
+    <label>Postal Code:</label>
+    <input type="text" th:field="*{postalcode}" placeholder="e.g. A1B 2C3" />
+    <div class="error" th:if="${#fields.hasErrors('postalcode')}" th:errors="*{postalcode}"></div>
+
+    <br>
+    <button type="submit">Sign Up</button>
+</form>
+
+<p><a th:href="@{/}">Already have an account? Sign In</a></p>
+</div>
+<footer>
+    Assignment 2 — Ayushi Parmar & Maria Angelina Guerta Ligo
+</footer>
+</body>
+</html>

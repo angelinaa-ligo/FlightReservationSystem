@@ -1,0 +1,104 @@
+<!-- Assignment 1 COMP303-002
+     Maria Angelina Guerta Ligo 301428777
+     Ayushi Parmar 301444746
+     10-30-2025-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Reservations</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    
+</head>
+<body>
+
+<h2 th:text="'Reservations for ' + ${username}"></h2>
+<div th:if="${message}" style="color: green; font-weight: bold; margin-bottom: 10px;">
+    <p th:text="${message}"></p>
+</div>
+
+<div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 10px;">
+    <p th:text="${error}"></p>
+</div>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Airline</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Adults</th>
+            <th>Children</th>
+            <th>Total Price</th>
+            <th>Booking Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+   <tbody>
+    <!-- Active reservations -->
+    <tr th:each="r : ${reservations}">
+        <td th:text="${r.flightId.origin}"></td>
+        <td th:text="${r.flightId.destination}"></td>
+        <td th:text="${r.flightId.airlineName}"></td>
+        <td th:text="${#temporals.format(r.flightId.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#temporals.format(r.flightId.arrivalTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${r.noOfAdults}"></td>
+        <td th:text="${r.noOfChildren}"></td>
+        <td th:text="${r.totalPrice}"></td>
+        <td th:text="${r.bookingDate}"></td>
+        <td th:text="${r.status}"></td>
+        <td style="text-align: center;">
+    <a th:href="@{'/reservation/edit/' + ${r.reservationId}}">
+        <button type="button" style="background-color: #FFD700; color: black; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+            Edit
+        </button>
+    </a>
+
+    <a th:href="@{'/reservation/cancel/' + ${r.reservationId}}"
+       onclick="return confirm('Are you sure you want to cancel this reservation?');">
+        <button type="button" style="background-color: #FF4C4C; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+            Cancel
+        </button>
+    </a>
+</td>
+
+    </tr>
+
+    <!-- Cancelled reservations -->
+    <tr th:each="c : ${cancelledReservations}">
+        <td th:text="${c.origin}"></td>
+        <td th:text="${c.destination}"></td>
+        <td th:text="${c.airline}"></td>
+        <td th:text="${#temporals.format(c.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#temporals.format(c.arrivalTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${c.noOfAdults}"></td>
+        <td th:text="${c.noOfChildren}"></td>
+        <td th:text="${c.totalPrice}"></td>
+        <td th:text="${c.bookingDate}"></td>
+        <td th:text="${c.status}"></td>
+        <td>
+            <!-- Delete button for cancelled reservations -->
+                <a th:href="@{'/reservation/delete/' + ${c.Id}}">
+                    <button type="button" style="background-color: #808080; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+                        Delete
+                    </button>
+                </a>
+        </td>
+    </tr>
+</tbody>
+
+</table>
+
+<br>
+<p style="margin-top: 15px;">
+    <a th:href="@{/reservation/new(username=${passenger.username})}">← Back to Reservations</a>
+</p>
+<footer>
+    Assignment 2 — Ayushi Parmar & Maria Angelina Guerta Ligo
+</footer>
+</body>
+</html>

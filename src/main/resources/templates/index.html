@@ -1,0 +1,28 @@
+<!-- Assignment 1 COMP303-002
+     Maria Angelina Guerta Ligo 301428777
+     Ayushi Parmar 301444746
+     10-30-2025-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign In</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    
+</head>
+<body>
+<div class="container page centered">
+	<h2>Customer Sign In</h2>
+	<form class="compact" th:action="@{/}" th:object="${passenger}" method="post">
+	    <p>Username: <input type="text" th:field="*{username}"/></p>
+	    <p>Password: <input type="password" th:field="*{password}"/></p>
+	    <p><button type="submit">Sign In</button></p>
+	    <p style="color:red" th:text="${error}"></p>
+	    <p><a th:href="@{/signup}">New user? Sign Up</a></p>
+	</form>
+</div>
+<footer>
+    Assignment 2 — Ayushi Parmar & Maria Angelina Guerta Ligo
+</footer>
+</body>
+</html>

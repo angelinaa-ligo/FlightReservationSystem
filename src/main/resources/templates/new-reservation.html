@@ -1,0 +1,120 @@
+<!-- Assignment 1 COMP303-002
+     Maria Angelina Guerta Ligo 301428777
+     Ayushi Parmar 301444746
+     10-30-2025-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book a Flight</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    
+</head>
+<body>
+<div class="container page centered">
+<h2 th:text="'Welcome, ' + ${passenger.username} + '! Book Your Flight Below:'"></h2>
+
+<!-- Step 1: Select origin, destination, airline -->
+<form th:action="@{/reservation/load-times}" method="post">
+    <input type="hidden" name="username" th:value="${passenger.username}" />
+
+    <label>Origin:</label>
+<select id="origin" name="origin" onchange="updateDestinations()" required>
+    <option value="">--Select A Origin--</option>
+    <option th:each="o : ${origins}"
+            th:value="${o}"
+            th:text="${o}"
+            th:selected="${o == selectedOrigin}"></option>
+</select>
+<br>
+
+<label>Destination:</label>
+<select id="destination" name="destination" required>
+    <option value="">--Select Destination--</option>
+    <option th:each="d : ${destinations}"
+            th:value="${d}"
+            th:text="${d}"
+            th:selected="${d == selectedDestination}"></option>
+</select>
+
+    <br>
+
+    <label>Airline:</label>
+    <select name="airline" required>
+        <option value="">--Select Airline--</option>
+        <option th:each="a : ${airlines}"
+                th:value="${a}"
+                th:text="${a}"
+                th:selected="${a == selectedAirline}"></option>
+    </select>
+    <br><br>
+
+    <button type="submit">Show Departure Times</button>
+</form>
+
+<br>
+
+<div th:if="${#lists.isEmpty(departureTimes) == false}">
+    <form th:action="@{/reservation/confirm}" method="post">
+        <input type="hidden" name="username" th:value="${passenger.username}" />
+        <input type="hidden" name="origin" th:value="${selectedOrigin}" />
+        <input type="hidden" name="destination" th:value="${selectedDestination}" />
+        <input type="hidden" name="airline" th:value="${selectedAirline}" />
+
+        <label>Departure Time:</label>
+        <select name="departureTime" required>
+            <option value="">--Select Departure Time--</option>
+            <option th:each="t : ${departureTimes}"
+                    th:value="${t}"
+                    th:text="${t}"></option>
+        </select><br>
+
+        <label>Number of Adults:</label>
+        <input type="number" name="noOfAdults" min="1" value="1" required><br>
+
+        <label>Number of Children:</label>
+        <input type="number" name="noOfChildren" min="0" value="0"><br><br>
+
+        <button type="submit">Confirm Reservation</button>
+    </form>
+</div>
+
+<br>
+<div class="button-center">
+    <button type="button" class="btn-orange"
+        th:attr="onclick='window.location.href=\'/reservation/view?username=' + ${passenger.username} + '\''">
+        See Reservations
+    </button>
+
+    <button type="button" class="btn-yellow"
+        th:attr="onclick='window.location.href=\'/edit?username=' + ${passenger.username} + '\''">
+        Edit Profile
+    </button>
+</div>
+</div>
+<footer>
+    Assignment 2 — Ayushi Parmar & Maria Angelina Guerta Ligo
+</footer>
+</body>
+<script>
+
+//when the user selects a origin, the same origin is not available in the destination
+function updateDestinations() {
+    const origin = document.getElementById('origin').value;
+    const destinationSelect = document.getElementById('destination');
+
+    for (let option of destinationSelect.options) {
+        option.disabled = false;
+    }
+
+    for (let option of destinationSelect.options) {
+        if (option.value === origin && option.value !== "") {
+            option.disabled = true;
+        }
+    }
+}
+</script>
+
+
+</html>
